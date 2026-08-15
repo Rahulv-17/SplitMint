@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    background-color: #12131a;
+    color: #e3e1ec;
+  }
+}
+
+@layer components {
+  /* Glassmorphism panel */
+  .glass-panel {
+    background: rgba(23, 23, 35, 0.45);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Ghost border utility — used across many components */
+  .ghost-border {
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  /* Hide scrollbar cleanly */
+  .hide-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Fintech input style */
+  .input-fintech {
+    background-color: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0;
+    color: #e3e1ec;
+    transition: border-color 0.3s ease;
+  }
+  .input-fintech:focus {
+    outline: none;
+    box-shadow: none;
+    border-bottom-color: #00F5A0;
+  }
+}
+
+@layer utilities {
+  /* Padding margin shorthands for layout */
+  .p-margin-mobile {
+    padding: 20px;
+  }
+  .p-margin-desktop {
+    padding: 48px;
+  }
+  .px-margin-mobile {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .px-margin-desktop {
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+}
+
+/* Material Symbols Outlined icon font */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined' !important;
+  font-weight: normal;
+  font-style: normal;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Hide global scrollbar for clean fintech look */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+}
