@@ -3,6 +3,7 @@ import { AuthContext } from '../context/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGoogleLogin } from '@react-oauth/google';
+import Logo from '../components/Logo';
 
 const Signup = () => {
   const { register, googleLogin } = useContext(AuthContext);
@@ -92,7 +93,7 @@ const Signup = () => {
             {/* Brand & Header */}
             <div className="text-center mb-8">
               <Link to="/" className="inline-block mb-3">
-                <h1 className="font-display-lg text-4xl font-bold text-primary tracking-tight">SplitMint</h1>
+                <Logo className="h-12 text-primary mx-auto" />
               </Link>
               <p className="text-xs text-on-surface-variant uppercase tracking-widest font-label-sm">
                 Create your account

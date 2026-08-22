@@ -1,12 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Logo from '../components/Logo';
 
 const Landing = () => {
   return (
     <div className="bg-background text-on-background min-h-screen flex flex-col font-body-md overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
       {/* Header */}
       <header className="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-white/10 h-20 flex justify-between items-center px-margin-mobile md:px-margin-desktop">
-        <div className="font-display-lg text-headline-md font-bold text-primary">SplitMint</div>
+        <Logo className="h-8 text-primary" />
         <div className="flex gap-4">
           <Link to="/login" className="font-label-sm text-label-sm px-4 py-2 border border-outline-variant rounded-lg hover:bg-white/5 transition-colors text-on-surface flex items-center">
             Log In
@@ -125,7 +126,7 @@ const Landing = () => {
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <div className="font-display-lg text-xl font-bold text-primary">SplitMint</div>
+              <Logo className="h-8 text-primary" />
             </div>
             <p className="text-on-surface-variant text-sm max-w-[200px] mb-5 leading-relaxed">
               Track expenses, manage budgets, split group costs, and understand your finances in one place.
