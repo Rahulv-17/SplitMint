@@ -25,27 +25,8 @@ const Analytics = () => {
     fetchAnalytics();
   }, []);
 
-  const trendData = [
-    { name: 'Jan', total: 4000 },
-    { name: 'Feb', total: 3000 },
-    { name: 'Mar', total: 5000 },
-    { name: 'Apr', total: 2780 },
-    { name: 'May', total: 6000 },
-    { name: 'Jun', total: 4500 },
-    { name: 'Jul', total: 7000 },
-    { name: 'Aug', total: 8500 },
-    { name: 'Sep', total: 6200 },
-    { name: 'Oct', total: (analytics?.totalOutflow || 0) > 0 ? analytics.totalOutflow : 24850 },
-  ];
-
-  const cashflowData = [
-    { name: 'May', income: 4000, expense: 2400 },
-    { name: 'Jun', income: 3000, expense: 1398 },
-    { name: 'Jul', income: 2000, expense: 9800 },
-    { name: 'Aug', income: 2780, expense: 3908 },
-    { name: 'Sep', income: 1890, expense: 4800 },
-    { name: 'Oct', income: analytics?.income || 2390, expense: analytics?.totalOutflow || 3800 },
-  ];
+  const trendData = analytics?.trendData || [];
+  const cashflowData = analytics?.cashflowData || [];
 
   if (loading) {
     return (
@@ -98,12 +79,6 @@ const Analytics = () => {
                   {analytics?.totalOutflow.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }).split('.')[1] || '00'}
                 </span>
               </h2>
-            </div>
-            <div className="flex bg-surface-container rounded-lg p-1 ghost-border">
-              <button className="px-4 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface font-label-sm transition-colors">1M</button>
-              <button className="px-4 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface font-label-sm transition-colors">3M</button>
-              <button className="px-4 py-1.5 rounded-md bg-surface-variant text-on-surface font-label-sm">YTD</button>
-              <button className="px-4 py-1.5 rounded-md text-on-surface-variant hover:text-on-surface font-label-sm transition-colors">ALL</button>
             </div>
           </div>
 

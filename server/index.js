@@ -42,6 +42,8 @@ app.use('/api/groups', require('./routes/groupRoutes'));
 app.use('/api/settlements', require('./routes/settlementRoutes'));
 app.use('/api/budgets', require('./routes/budgetRoutes'));
 app.use('/api/analytics', require('./routes/analyticsRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/recurring', require('./routes/recurringRoutes'));
 
 app.get('/', (req, res) => {
   res.send('SplitMint API is running...');

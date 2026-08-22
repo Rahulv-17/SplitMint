@@ -34,6 +34,20 @@ const createExpense = async (req, res) => {
       return res.status(400).json({ message: 'Amount must be greater than 0' });
     }
 
+    let finalSplits = splits || [];
+
+    // If it's a group expense and no splits are provided, default to splitting equally among all members
+    if (group && finalSplits.length === 0) {
+      const groupData = await Group.findById(group);
+      if (groupData && groupData.members && groupData.members.length > 0) {
+        const splitAmount = Number(amount) / groupData.members.length;
+        finalSplits = groupData.members.map(memberId => ({
+          user: memberId,
+          amount: splitAmount
+        }));
+      }
+    }
+
     const expense = new Expense({
       description,
       amount: Number(amount),
@@ -41,7 +55,7 @@ const createExpense = async (req, res) => {
       date: date ? new Date(date) : new Date(),
       paidBy: req.user.id,
       group: group || null,
-      splits: splits || []
+      splits: finalSplits
     });
 
     const createdExpense = await expense.save();

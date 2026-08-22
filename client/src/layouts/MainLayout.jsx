@@ -1,10 +1,23 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Link, useLocation } from 'react-router-dom';
+import AddExpenseModal from '../components/AddExpenseModal';
 
 const MainLayout = ({ children }) => {
   const { user, logout } = useContext(AuthContext);
   const location = useLocation();
+  const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
+
+  useEffect(() => {
+    const handleOpen = () => setIsExpenseModalOpen(true);
+    window.addEventListener('openAddExpense', handleOpen);
+    return () => window.removeEventListener('openAddExpense', handleOpen);
+  }, []);
+
+  const handleGlobalExpenseAdded = (newExpense) => {
+    // Notify child components (like Expenses or Dashboard) to refresh
+    window.dispatchEvent(new CustomEvent('expenseAdded', { detail: newExpense }));
+  };
 
   const navItems = [
     { name: 'Dashboard', icon: 'insert_chart', path: '/dashboard' },
@@ -65,7 +78,7 @@ const MainLayout = ({ children }) => {
           <div className="flex items-center gap-4">
             <h2 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg font-bold text-primary block md:hidden">SplitMint</h2>
             <h2 className="font-headline-md text-headline-md text-on-surface hidden md:block">
-              Good evening, {user?.name?.split(' ')[0]} 👋
+              Good evening, {user?.name?.split(' ')[0]}
             </h2>
           </div>
           <div className="flex items-center gap-4">
@@ -96,9 +109,9 @@ const MainLayout = ({ children }) => {
           <span className="text-[10px] font-medium">Money</span>
         </Link>
         <div className="relative -top-5">
-          <Link to="/money" className="w-14 h-14 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-lg shadow-primary/20">
+          <button onClick={() => window.dispatchEvent(new CustomEvent('openAddExpense'))} className="w-14 h-14 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-lg shadow-primary/20">
             <span className="material-symbols-outlined text-[28px] text-black">add</span>
-          </Link>
+          </button>
         </div>
         <Link to="/groups" className={`flex flex-col items-center gap-1 ${location.pathname === '/groups' ? 'text-primary' : 'text-on-surface-variant hover:text-primary transition-colors'}`}>
           <span className="material-symbols-outlined" style={{ fontVariationSettings: location.pathname === '/groups' ? "'FILL' 1" : "" }}>group</span>
@@ -109,6 +122,13 @@ const MainLayout = ({ children }) => {
           <span className="text-[10px] font-medium">Settings</span>
         </Link>
       </nav>
+      
+      {/* Global Modals */}
+      <AddExpenseModal
+        isOpen={isExpenseModalOpen}
+        onClose={() => setIsExpenseModalOpen(false)}
+        onExpenseAdded={handleGlobalExpenseAdded}
+      />
     </div>
   );
 };

@@ -13,47 +13,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Static mock data for activity feed
-  const [activities] = useState([
-    {
-      id: 1,
-      user: 'Rahul',
-      action: 'added an expense in',
-      target: 'Goa Trip',
-      detail: 'Dinner at Britto\'s',
-      time: '2 hours ago',
-      amount: 2400,
-      tag: 'Food',
-      icon: 'add_circle',
-      colorClass: 'text-primary',
-      bgClass: 'bg-primary/10 border-primary/20'
-    },
-    {
-      id: 2,
-      user: 'Arjun',
-      action: 'settled up with you',
-      target: '',
-      detail: 'Via UPI',
-      time: '5 hours ago',
-      amount: 800,
-      tag: 'Settlement',
-      icon: 'handshake',
-      colorClass: 'text-secondary-container',
-      bgClass: 'bg-secondary-container/10 border-secondary-container/20',
-      amountColor: 'text-secondary-container'
-    },
-    {
-      id: 3,
-      user: 'Priya',
-      action: 'updated',
-      target: 'Apartment Rent',
-      detail: 'Changed split ratio',
-      time: 'Yesterday',
-      icon: 'edit',
-      colorClass: 'text-on-surface-variant',
-      bgClass: 'bg-surface-bright border-white/10'
-    }
-  ]);
+  const activities = summary?.activities || [];
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -68,6 +28,13 @@ const Dashboard = () => {
       }
     };
     fetchDashboard();
+
+    const handleExpenseAdded = () => {
+      fetchDashboard();
+    };
+    
+    window.addEventListener('expenseAdded', handleExpenseAdded);
+    return () => window.removeEventListener('expenseAdded', handleExpenseAdded);
   }, []);
 
   const getCategoryIcon = (category) => {
@@ -306,28 +273,35 @@ const Dashboard = () => {
             <h2 className="font-headline-md text-headline-md text-on-background">Recent Activity</h2>
           </div>
           <div className="space-y-4">
-            {activities.map((activity) => (
-              <div key={activity.id} className="glass-panel p-6 rounded-2xl flex items-start gap-4 hover:bg-surface-container transition-colors duration-300 group cursor-pointer relative overflow-hidden border border-white/5">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 border z-10 ${activity.bgClass}`}>
-                  <span className={`material-symbols-outlined ${activity.colorClass}`}>{activity.icon}</span>
-                </div>
-                <div className="flex-1 z-10">
-                  <p className="font-body-lg text-body-lg text-on-surface">
-                    <span className="font-semibold text-white">{activity.user}</span> {activity.action} {activity.target && <span className="text-primary cursor-pointer hover:underline">{activity.target}</span>}
-                  </p>
-                  <p className="font-label-sm text-label-sm text-on-surface-variant mt-1">{activity.detail} • {activity.time}</p>
-                </div>
-                {activity.amount && (
-                  <div className="text-right z-10">
-                    <p className={`font-currency-md text-currency-md ${activity.amountColor || 'text-error'}`}>₹{activity.amount.toLocaleString()}</p>
-                    {activity.tag && (
-                      <span className="inline-block mt-2 px-2 py-1 bg-surface-container-high rounded-md text-[10px] uppercase tracking-wider text-on-surface-variant border border-white/5">{activity.tag}</span>
-                    )}
-                  </div>
-                )}
+            {activities.length === 0 ? (
+              <div className="py-12 flex flex-col items-center gap-3 text-center border border-white/5 border-dashed rounded-xl">
+                <span className="material-symbols-outlined text-4xl text-on-surface-variant">history</span>
+                <p className="text-on-surface-variant">No recent activity.</p>
               </div>
-            ))}
+            ) : (
+              activities.map((activity) => (
+                <div key={activity.id} className="glass-panel p-6 rounded-2xl flex items-start gap-4 hover:bg-surface-container transition-colors duration-300 group cursor-pointer relative overflow-hidden border border-white/5">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                  <div className={`w-12 h-12 rounded-full flex items-center justify-center shrink-0 border z-10 ${activity.bgClass}`}>
+                    <span className={`material-symbols-outlined ${activity.colorClass}`}>{activity.icon}</span>
+                  </div>
+                  <div className="flex-1 z-10">
+                    <p className="font-body-lg text-body-lg text-on-surface">
+                      <span className="font-semibold text-white">{activity.user}</span> {activity.action} {activity.target && <span className="text-primary cursor-pointer hover:underline">{activity.target}</span>}
+                    </p>
+                    <p className="font-label-sm text-label-sm text-on-surface-variant mt-1">{activity.detail} • {activity.time}</p>
+                  </div>
+                  {activity.amount && (
+                    <div className="text-right z-10">
+                      <p className={`font-currency-md text-currency-md ${activity.amountColor || 'text-error'}`}>₹{activity.amount.toLocaleString()}</p>
+                      {activity.tag && (
+                        <span className="inline-block mt-2 px-2 py-1 bg-surface-container-high rounded-md text-[10px] uppercase tracking-wider text-on-surface-variant border border-white/5">{activity.tag}</span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>

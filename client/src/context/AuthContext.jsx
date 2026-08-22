@@ -12,16 +12,40 @@ export const AuthProvider = ({ children }) => {
 
   // Set axios default header whenever token changes
   useEffect(() => {
+    let interceptor;
+    
     if (token) {
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       localStorage.setItem('token', token);
       fetchUser();
+      
+      // Add interceptor to handle expired/invalid sessions globally
+      interceptor = axios.interceptors.response.use(
+        (response) => response,
+        (error) => {
+          if (error.response && error.response.status === 401) {
+            console.error('Session expired or invalid, logging out...');
+            delete axios.defaults.headers.common['Authorization'];
+            localStorage.removeItem('token');
+            setUser(null);
+            setToken(null);
+          }
+          return Promise.reject(error);
+        }
+      );
     } else {
       delete axios.defaults.headers.common['Authorization'];
       localStorage.removeItem('token');
       setUser(null);
       setLoading(false);
     }
+    
+    // Cleanup interceptor on unmount or token change
+    return () => {
+      if (interceptor !== undefined) {
+        axios.interceptors.response.eject(interceptor);
+      }
+    };
   }, [token]);
 
   const fetchUser = async () => {

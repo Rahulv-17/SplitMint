@@ -82,7 +82,36 @@ const createSettlement = async (req, res) => {
   }
 };
 
+const Notification = require('../models/Notification');
+
+// @desc    Send a settlement reminder
+// @route   POST /api/settlements/remind
+// @access  Private
+const sendReminder = async (req, res) => {
+  try {
+    const { receiver, amount, group } = req.body;
+    
+    // Create a notification for the person who owes the money
+    const notification = await Notification.create({
+      user: receiver,
+      type: 'settlement',
+      message: `Reminder: You owe ₹${amount} to ${req.user.name} for the group.`,
+      relatedId: group,
+      isRead: false
+    });
+
+    if (req.io) {
+      req.io.to(group?.toString()).emit('newNotification', notification);
+    }
+    
+    res.status(200).json({ message: 'Reminder sent successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 module.exports = {
   getOptimizedSettlements,
-  createSettlement
+  createSettlement,
+  sendReminder
 };

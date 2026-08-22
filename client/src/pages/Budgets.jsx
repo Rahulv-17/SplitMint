@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import CreateBudgetModal from '../components/CreateBudgetModal';
 import axios from 'axios';
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const Budgets = () => {
   const [budgets, setBudgets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -10,7 +12,7 @@ const Budgets = () => {
 
   const fetchBudgets = async () => {
     try {
-      const res = await axios.get('http://localhost:5000/api/budgets');
+      const res = await axios.get(`${API}/api/budgets`);
       setBudgets(res.data);
     } catch (error) {
       console.error(error);

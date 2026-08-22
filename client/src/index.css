@@ -93,3 +93,12 @@
   background: rgba(255, 255, 255, 0.1);
   border-radius: 9999px;
 }
+
+@keyframes dash {
+  from { stroke-dashoffset: 60; }
+  to { stroke-dashoffset: 0; }
+}
+
+.dash-animate {
+  animation: dash 2s linear infinite;
+}

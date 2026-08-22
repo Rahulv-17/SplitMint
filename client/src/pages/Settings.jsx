@@ -13,6 +13,14 @@ const Settings = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   
+  // Password state
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [passwordLoading, setPasswordLoading] = useState(false);
+  const [passwordMessage, setPasswordMessage] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  
   // Cropper state
   const fileInputRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
@@ -112,6 +120,33 @@ const Settings = () => {
     }
   };
 
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      setPasswordError('New passwords do not match');
+      return;
+    }
+    
+    setPasswordLoading(true);
+    setPasswordMessage('');
+    setPasswordError('');
+
+    try {
+      await axios.put(`${API}/api/auth/update-password`, {
+        currentPassword,
+        newPassword
+      });
+      setPasswordMessage('Password updated successfully!');
+      setCurrentPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
+    } catch (err) {
+      setPasswordError(err.response?.data?.message || 'Failed to update password');
+    } finally {
+      setPasswordLoading(false);
+    }
+  };
+
   return (
     <MainLayout>
       <div className="px-4 md:px-8 py-8 max-w-3xl mx-auto min-h-[calc(100vh-80px)] relative">
@@ -200,6 +235,76 @@ const Settings = () => {
               </div>
             </form>
           </section>
+
+          {/* Security Section */}
+          {!user?.googleId && (
+            <section className="bg-surface-container/50 backdrop-blur-md rounded-2xl p-6 border border-white/10">
+              <div className="flex items-center gap-3 mb-6">
+                <span className="material-symbols-outlined text-primary">lock</span>
+                <h3 className="text-lg font-semibold">Change Password</h3>
+              </div>
+
+              {passwordMessage && (
+                <div className="p-3 rounded-xl text-xs flex items-center bg-primary/10 border border-primary/20 text-primary mb-4">
+                  <span className="material-symbols-outlined text-base mr-2">check_circle</span>
+                  {passwordMessage}
+                </div>
+              )}
+              {passwordError && (
+                <div className="p-3 rounded-xl text-xs flex items-center bg-error/10 border border-error/20 text-error mb-4">
+                  <span className="material-symbols-outlined text-base mr-2">error_outline</span>
+                  {passwordError}
+                </div>
+              )}
+
+              <form onSubmit={handleUpdatePassword} className="space-y-5 max-w-md">
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold tracking-wider uppercase text-on-surface-variant">Current Password</label>
+                  <input
+                    className="w-full bg-transparent border-0 border-b border-white/10 px-0 py-2 focus:ring-0 focus:border-primary-container text-on-surface transition-colors placeholder:text-on-surface-variant/50 outline-none"
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold tracking-wider uppercase text-on-surface-variant">New Password</label>
+                  <input
+                    className="w-full bg-transparent border-0 border-b border-white/10 px-0 py-2 focus:ring-0 focus:border-primary-container text-on-surface transition-colors placeholder:text-on-surface-variant/50 outline-none"
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    required
+                    minLength="6"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold tracking-wider uppercase text-on-surface-variant">Confirm New Password</label>
+                  <input
+                    className="w-full bg-transparent border-0 border-b border-white/10 px-0 py-2 focus:ring-0 focus:border-primary-container text-on-surface transition-colors placeholder:text-on-surface-variant/50 outline-none"
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    required
+                    minLength="6"
+                  />
+                </div>
+                
+                <div className="flex justify-end pt-2">
+                  <button
+                    type="submit"
+                    disabled={passwordLoading}
+                    className="px-6 py-2.5 rounded-xl border border-white/10 text-on-background font-semibold text-sm hover:bg-white/5 transition-colors disabled:opacity-50 flex items-center gap-2"
+                  >
+                    {passwordLoading ? (
+                      <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : 'Update Password'}
+                  </button>
+                </div>
+              </form>
+            </section>
+          )}
 
           {/* Danger Zone */}
           <section className="bg-error/5 rounded-2xl p-6 border border-error/20">

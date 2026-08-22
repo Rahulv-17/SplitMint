@@ -176,6 +176,44 @@ const updateMe = async (req, res) => {
   }
 };
 
+// @desc    Update user password
+// @route   PUT /api/auth/update-password
+// @access  Private
+const updatePassword = async (req, res) => {
+  try {
+    const { currentPassword, newPassword } = req.body;
+    
+    if (!currentPassword || !newPassword) {
+      return res.status(400).json({ message: 'Please provide both current and new passwords' });
+    }
+
+    const user = await User.findById(req.user.id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    
+    // Check if user is a Google auth user without a password
+    if (user.googleId && !user.password) {
+      return res.status(400).json({ message: 'Cannot change password for Google accounts' });
+    }
+
+    // Verify current password
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Current password is incorrect' });
+    }
+
+    // Hash new password
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    res.json({ message: 'Password updated successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 // @desc    Forgot Password
 // @route   POST /api/auth/forgot-password
 // @access  Public
@@ -277,6 +315,7 @@ module.exports = {
   googleAuth,
   getMe,
   updateMe,
+  updatePassword,
   forgotPassword,
   resetPassword
 };

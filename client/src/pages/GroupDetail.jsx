@@ -4,6 +4,7 @@ import MainLayout from '../layouts/MainLayout';
 import axios from 'axios';
 import { AuthContext } from '../context/AuthContext';
 import AddExpenseModal from '../components/AddExpenseModal';
+import SmartSettlementView from '../components/SmartSettlementView';
 import { io } from 'socket.io-client';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -18,8 +19,11 @@ const GroupDetail = () => {
   const [optimizedSettlements, setOptimizedSettlements] = useState([]);
 
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState('Overview');
+  const [activeTab, setActiveTab] = useState('Expenses');
   const [isExpenseModalOpen, setIsExpenseModalOpen] = useState(false);
+  const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
+  const [newMemberEmail, setNewMemberEmail] = useState('');
+  const [addMemberLoading, setAddMemberLoading] = useState(false);
   const [settlingId, setSettlingId] = useState(null);
 
   // Fix P1: Extract fetchGroupData into a reusable callback
@@ -86,9 +90,40 @@ const GroupDetail = () => {
     }
   };
 
-  // Fix P1: Called when AddExpenseModal succeeds — re-fetch group data
+  const handleSendReminder = async (settlement) => {
+    try {
+      await axios.post(`${API}/api/settlements/remind`, {
+        receiver: settlement.payer, // Since I am receiver of money, I want to remind the payer
+        amount: settlement.amount,
+        group: id
+      });
+      return true;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
+  };
+
   const handleExpenseAdded = async () => {
     await fetchGroupData();
+  };
+
+  const handleAddMember = async (e) => {
+    e.preventDefault();
+    if (!newMemberEmail) return;
+    setAddMemberLoading(true);
+    try {
+      await axios.post(`${API}/api/groups/${id}/members`, { email: newMemberEmail }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setNewMemberEmail('');
+      setIsAddMemberOpen(false);
+      await fetchGroupData();
+    } catch (err) {
+      alert(err.response?.data?.message || 'Failed to add member');
+    } finally {
+      setAddMemberLoading(false);
+    }
   };
 
   if (loading) {
@@ -195,21 +230,56 @@ const GroupDetail = () => {
               <span className="ml-4 font-body-md text-on-surface-variant text-sm">{group.members.length} Members</span>
             </div>
           </div>
-          <div className="flex gap-4">
-            <button
-              className="px-6 py-3 rounded-xl bg-primary-container text-on-primary-container text-black font-semibold text-sm hover:opacity-90 transition-opacity flex items-center gap-2"
-              onClick={() => setIsExpenseModalOpen(true)}
-            >
-              <span className="material-symbols-outlined text-sm">add</span>
-              Add Expense
-            </button>
+          <div className="flex flex-col gap-4">
+            <div className="flex gap-4">
+              <button
+                className="px-6 py-3 rounded-xl bg-surface-container-high text-on-surface font-semibold text-sm hover:bg-surface-variant transition-colors flex items-center gap-2 border border-white/5"
+                onClick={() => setIsAddMemberOpen(true)}
+              >
+                <span className="material-symbols-outlined text-sm">person_add</span>
+                Add Member
+              </button>
+              <button
+                className="px-6 py-3 rounded-xl bg-primary-container text-on-primary-container text-black font-semibold text-sm hover:opacity-90 transition-opacity flex items-center gap-2"
+                onClick={() => setIsExpenseModalOpen(true)}
+              >
+                <span className="material-symbols-outlined text-sm">add</span>
+                Add Expense
+              </button>
+            </div>
+            {isAddMemberOpen && (
+              <form onSubmit={handleAddMember} className="flex gap-2 animate-in fade-in slide-in-from-top-2">
+                <input
+                  type="email"
+                  placeholder="Member's email..."
+                  value={newMemberEmail}
+                  onChange={(e) => setNewMemberEmail(e.target.value)}
+                  className="flex-1 bg-surface-container border border-white/10 rounded-xl px-4 py-2 text-sm text-on-surface focus:outline-none focus:border-primary"
+                  required
+                />
+                <button
+                  type="submit"
+                  disabled={addMemberLoading}
+                  className="px-4 py-2 bg-primary text-black rounded-xl text-sm font-semibold hover:opacity-90 disabled:opacity-50"
+                >
+                  {addMemberLoading ? 'Adding...' : 'Add'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setIsAddMemberOpen(false)}
+                  className="px-3 py-2 text-on-surface-variant hover:text-on-surface"
+                >
+                  <span className="material-symbols-outlined text-[20px]">close</span>
+                </button>
+              </form>
+            )}
           </div>
         </div>
 
         {/* Tabs */}
         <div className="border-b border-white/10 mb-8 overflow-x-auto">
           <nav className="flex gap-8 min-w-max pb-px">
-            {['Overview', 'Expenses', 'Balances', 'Settlements'].map(tab => (
+            {['Expenses', 'Smart Settlement'].map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
@@ -221,8 +291,17 @@ const GroupDetail = () => {
           </nav>
         </div>
 
-        {/* Main Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {activeTab === 'Smart Settlement' ? (
+          <SmartSettlementView 
+            group={group}
+            optimizedSettlements={optimizedSettlements}
+            userId={userId}
+            onSettleUp={handleSettleUp}
+            settlingId={settlingId}
+            onSendReminder={handleSendReminder}
+          />
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
 
           {/* Left Column */}
           <div className="lg:col-span-4 flex flex-col gap-6">
@@ -263,7 +342,7 @@ const GroupDetail = () => {
                   );
                 })}
                 {optimizedSettlements.filter(s => s.payer === userId || s.receiver === userId).length === 0 && (
-                  <p className="text-sm text-on-surface-variant text-center py-2">✅ All settled up!</p>
+                  <p className="text-sm text-on-surface-variant text-center py-2">All settled up!</p>
                 )}
               </div>
             </div>
@@ -295,8 +374,8 @@ const GroupDetail = () => {
           {/* Right Column */}
           <div className="lg:col-span-8 glass-panel p-6 rounded-2xl border border-white/10 flex flex-col min-h-[500px]">
 
-            {/* Overview / Expenses Tab */}
-            {(activeTab === 'Overview' || activeTab === 'Expenses') && (
+            {/* Expenses Tab */}
+            {activeTab === 'Expenses' && (
               <>
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-lg font-semibold text-on-surface">Expenses</h2>
@@ -363,79 +442,9 @@ const GroupDetail = () => {
                 </div>
               </>
             )}
-
-            {/* Balances Tab — Fix P1: was just placeholder text */}
-            {activeTab === 'Balances' && (
-              <>
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-lg font-semibold text-on-surface">Member Balances</h2>
-                </div>
-                <div className="flex-1 space-y-3">
-                  {Object.entries(memberBalances).map(([memberId, { name, balance }]) => {
-                    const roundedBalance = Math.round(balance * 100) / 100;
-                    const isMe = memberId === userId;
-                    return (
-                      <div key={memberId} className="flex items-center justify-between p-4 rounded-xl bg-surface-container-low border border-white/5">
-                        <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center font-bold text-sm border border-white/10">
-                            {name.charAt(0).toUpperCase()}
-                          </div>
-                          <div>
-                            <p className="text-sm font-medium text-on-surface">{isMe ? `${name} (You)` : name}</p>
-                            <p className="text-xs text-on-surface-variant">
-                              {roundedBalance > 0 ? 'Is owed' : roundedBalance < 0 ? 'Owes' : 'Settled up'}
-                            </p>
-                          </div>
-                        </div>
-                        <div className={`text-lg font-bold ${roundedBalance > 0 ? 'text-primary' : roundedBalance < 0 ? 'text-error' : 'text-on-surface-variant'}`}>
-                          {roundedBalance > 0 ? '+' : ''}₹{Math.abs(roundedBalance).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </>
-            )}
-
-            {/* Settlements Tab */}
-            {activeTab === 'Settlements' && (
-              <>
-                <div className="flex justify-between items-center mb-6">
-                  <h2 className="text-lg font-semibold text-on-surface">Completed Settlements</h2>
-                </div>
-                <div className="flex-1 space-y-2">
-                  {settlements.length === 0 ? (
-                    <div className="py-12 flex flex-col items-center gap-3 text-center">
-                      <span className="material-symbols-outlined text-4xl text-on-surface-variant">payments</span>
-                      <p className="text-on-surface-variant">No settlements yet.</p>
-                    </div>
-                  ) : (
-                    settlements.map(settlement => (
-                      <div key={settlement._id} className="flex items-center justify-between p-4 hover:bg-surface-container-low rounded-xl border border-transparent hover:border-white/5 transition-colors">
-                        <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                            <span className="material-symbols-outlined text-primary text-[18px]">payments</span>
-                          </div>
-                          <div>
-                            <h4 className="text-sm font-medium text-on-surface">
-                              <span className="text-primary">{settlement.payer?.name}</span>
-                              {' '}paid{' '}
-                              <span className="text-on-surface">{settlement.receiver?.name}</span>
-                            </h4>
-                            <p className="text-xs text-on-surface-variant">{new Date(settlement.createdAt).toLocaleDateString()}</p>
-                          </div>
-                        </div>
-                        <div className="font-bold text-primary">
-                          ₹{settlement.amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                        </div>
-                      </div>
-                    ))
-                  )}
-                </div>
-              </>
-            )}
           </div>
         </div>
+        )}
       </div>
 
       <AddExpenseModal

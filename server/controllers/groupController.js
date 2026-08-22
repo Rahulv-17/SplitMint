@@ -101,7 +101,8 @@ const addMember = async (req, res) => {
       return res.status(403).json({ message: 'Not authorized' });
     }
 
-    const userToAdd = await User.findOne({ email });
+    // Case-insensitive search for email
+    const userToAdd = await User.findOne({ email: new RegExp('^' + email.trim() + '$', 'i') });
     if (!userToAdd) return res.status(404).json({ message: 'User not found with that email' });
 
     if (group.members.some(m => m.toString() === userToAdd._id.toString())) {

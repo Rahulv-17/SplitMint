@@ -26,10 +26,17 @@ const Expenses = () => {
 
   useEffect(() => {
     fetchExpenses();
+    
+    // Listen to global expense added event (from MainLayout global modal)
+    const handleGlobalExpenseAdded = (e) => {
+      handleExpenseAdded(e.detail);
+    };
+    window.addEventListener('expenseAdded', handleGlobalExpenseAdded);
+    return () => window.removeEventListener('expenseAdded', handleGlobalExpenseAdded);
   }, []);
 
   const handleExpenseAdded = (newExpense) => {
-    setExpenses([newExpense, ...expenses]);
+    setExpenses(prevExpenses => [newExpense, ...prevExpenses]);
   };
 
   const handleDeleteExpense = async (id) => {

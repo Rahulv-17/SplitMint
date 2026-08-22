@@ -96,6 +96,56 @@ const getDashboardSummary = async (req, res) => {
       weeklyData.push({ name: `Week ${4 - i}`, total: Math.round(total) });
     }
 
+    // --- Recent Activities (Expenses & Settlements) ---
+    const recentSettlements = await Settlement.find({
+      $or: [{ payer: userId }, { receiver: userId }],
+      status: 'completed'
+    }).populate('payer receiver').sort({ createdAt: -1 }).limit(5);
+
+    const activities = [];
+    
+    // Add expenses to activities
+    allUserExpenses.slice(0, 5).forEach(e => {
+      activities.push({
+        id: `exp_${e._id}`,
+        user: 'You',
+        action: 'added an expense',
+        target: '',
+        detail: e.description,
+        time: new Date(e.date).toLocaleDateString(),
+        date: new Date(e.date),
+        amount: e.amount,
+        tag: e.category,
+        icon: 'add_circle',
+        colorClass: 'text-primary',
+        bgClass: 'bg-primary/10 border-primary/20'
+      });
+    });
+
+    // Add settlements to activities
+    recentSettlements.forEach(s => {
+      const isPayer = s.payer._id.toString() === userId;
+      activities.push({
+        id: `set_${s._id}`,
+        user: isPayer ? 'You' : s.payer.name.split(' ')[0],
+        action: isPayer ? `settled up with ${s.receiver.name.split(' ')[0]}` : 'settled up with you',
+        target: '',
+        detail: 'Settlement',
+        time: new Date(s.createdAt).toLocaleDateString(),
+        date: new Date(s.createdAt),
+        amount: s.amount,
+        tag: 'Settlement',
+        icon: 'handshake',
+        colorClass: 'text-secondary-container',
+        bgClass: 'bg-secondary-container/10 border-secondary-container/20',
+        amountColor: 'text-secondary-container'
+      });
+    });
+
+    // Sort by date descending and take top 10
+    activities.sort((a, b) => b.date - a.date);
+    const recentActivities = activities.slice(0, 10);
+
     res.json({
       totalExpenses: Math.round(totalExpenses * 100) / 100,
       allTimeExpenses: Math.round(allTimeExpenses * 100) / 100,
@@ -105,6 +155,7 @@ const getDashboardSummary = async (req, res) => {
       recentExpenses,
       groups: groupSummaries,
       weeklyData,
+      activities: recentActivities
     });
   } catch (error) {
     console.error(error);

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 const CreateBudgetModal = ({ isOpen, onClose, onBudgetCreated }) => {
   const [category, setCategory] = useState('Food & Drinks');
   const [limit, setLimit] = useState('');
@@ -15,7 +17,7 @@ const CreateBudgetModal = ({ isOpen, onClose, onBudgetCreated }) => {
     setError('');
 
     try {
-      const res = await axios.post('http://localhost:5000/api/budgets', {
+      const res = await axios.post(`${API}/api/budgets`, {
         category,
         limit: Number(limit)
       });
