@@ -2,7 +2,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { Link, useLocation } from 'react-router-dom';
 import AddExpenseModal from '../components/AddExpenseModal';
-import Logo from '../components/Logo';
 
 const MainLayout = ({ children }) => {
   const { user, logout } = useContext(AuthContext);
@@ -32,7 +31,7 @@ const MainLayout = ({ children }) => {
       {/* SideNavBar */}
       <nav className="w-sidebar-width h-screen fixed left-0 top-0 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-r border-white/10 flex-col py-margin-desktop px-6 z-50 hidden md:flex">
         <div className="mb-12">
-          <Logo className="h-10 text-primary mb-1" />
+          <h1 className="font-display-lg text-display-lg font-bold text-primary">SplitMint</h1>
           <p className="font-body-md text-on-surface-variant">Premium Finance</p>
         </div>
         
@@ -77,9 +76,7 @@ const MainLayout = ({ children }) => {
         {/* TopAppBar (Mobile & Desktop Header) */}
         <header className="flex justify-between items-center h-20 px-margin-mobile md:px-margin-desktop docked full-width top-0 sticky z-40 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-white/10">
           <div className="flex items-center gap-4">
-            <div className="block md:hidden">
-              <Logo className="h-8 text-primary" />
-            </div>
+            <h2 className="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg font-bold text-primary block md:hidden">SplitMint</h2>
             <h2 className="font-headline-md text-headline-md text-on-surface hidden md:block">
               Good evening, {user?.name?.split(' ')[0]}
             </h2>
