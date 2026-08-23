@@ -97,7 +97,7 @@ const Expenses = () => {
           <div className="relative w-full md:w-96 flex items-center">
             <span className="material-symbols-outlined absolute left-3 text-on-surface-variant text-[20px]">search</span>
             <input
-              className="w-full bg-surface-container-low border-b border-surface-variant focus:border-primary-container focus:ring-0 text-on-background pl-10 pr-4 py-3 transition-colors outline-none font-body-md bg-transparent placeholder-on-surface-variant/50"
+              className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40"
               placeholder="Search expenses..."
               type="text"
               value={searchQuery}

@@ -104,7 +104,7 @@ const AddExpenseModal = ({ isOpen, onClose, onExpenseAdded, groupId = null }) =>
             <div className="space-y-2">
               <label className="text-on-surface-variant text-label-sm block">Description</label>
               <input
-                className="w-full bg-transparent border-b border-surface-variant focus:border-primary-container focus:ring-0 text-on-background px-0 py-2 transition-colors outline-none font-body-md"
+                className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40"
                 placeholder="What was this for?"
                 type="text"
                 value={description}
@@ -118,7 +118,7 @@ const AddExpenseModal = ({ isOpen, onClose, onExpenseAdded, groupId = null }) =>
               <label className="text-on-surface-variant text-label-sm block">Category</label>
               <div className="relative">
                 <select
-                  className="w-full bg-surface-container-low border-b border-surface-variant focus:border-primary-container focus:ring-0 text-on-background px-0 py-2 transition-colors outline-none font-body-md appearance-none"
+                  className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md appearance-none"
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                   required
@@ -134,7 +134,7 @@ const AddExpenseModal = ({ isOpen, onClose, onExpenseAdded, groupId = null }) =>
                   <option value="Healthcare">Healthcare</option>
                   <option value="Other">Other</option>
                 </select>
-                <span className="material-symbols-outlined absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+                <span className="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
               </div>
             </div>
           </div>
@@ -143,7 +143,7 @@ const AddExpenseModal = ({ isOpen, onClose, onExpenseAdded, groupId = null }) =>
           <div className="space-y-2">
             <label className="text-on-surface-variant text-label-sm block">Date</label>
             <input
-              className="w-full bg-transparent border-b border-surface-variant focus:border-primary-container focus:ring-0 text-on-background px-0 py-2 transition-colors outline-none font-body-md [color-scheme:dark]"
+              className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md [color-scheme:dark]"
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}

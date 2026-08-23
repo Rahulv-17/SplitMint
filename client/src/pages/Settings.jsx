@@ -204,7 +204,7 @@ const Settings = () => {
                   <div className="space-y-2">
                     <label className="text-xs font-semibold tracking-wider uppercase text-on-surface-variant">Full Name</label>
                     <input
-                      className="w-full bg-transparent border-0 border-b border-white/10 px-0 py-2 focus:ring-0 focus:border-primary-container text-on-surface transition-colors placeholder:text-on-surface-variant/50 outline-none"
+                      className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40"
                       type="text"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
@@ -214,7 +214,7 @@ const Settings = () => {
                   <div className="space-y-2">
                     <label className="text-xs font-semibold tracking-wider uppercase text-on-surface-variant">Email Address</label>
                     <input
-                      className="w-full bg-transparent border-0 border-b border-white/10 px-0 py-2 text-on-surface-variant cursor-not-allowed outline-none"
+                      className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm text-on-surface-variant cursor-not-allowed outline-none font-body-md"
                       readOnly
                       type="email"
                       value={user?.email || ''}
@@ -261,7 +261,7 @@ const Settings = () => {
                 <div className="space-y-2">
                   <label className="text-xs font-semibold tracking-wider uppercase text-on-surface-variant">Current Password</label>
                   <input
-                    className="w-full bg-transparent border-0 border-b border-white/10 px-0 py-2 focus:ring-0 focus:border-primary-container text-on-surface transition-colors placeholder:text-on-surface-variant/50 outline-none"
+                    className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40"
                     type="password"
                     value={currentPassword}
                     onChange={(e) => setCurrentPassword(e.target.value)}
@@ -271,7 +271,7 @@ const Settings = () => {
                 <div className="space-y-2">
                   <label className="text-xs font-semibold tracking-wider uppercase text-on-surface-variant">New Password</label>
                   <input
-                    className="w-full bg-transparent border-0 border-b border-white/10 px-0 py-2 focus:ring-0 focus:border-primary-container text-on-surface transition-colors placeholder:text-on-surface-variant/50 outline-none"
+                    className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40"
                     type="password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
@@ -282,7 +282,7 @@ const Settings = () => {
                 <div className="space-y-2">
                   <label className="text-xs font-semibold tracking-wider uppercase text-on-surface-variant">Confirm New Password</label>
                   <input
-                    className="w-full bg-transparent border-0 border-b border-white/10 px-0 py-2 focus:ring-0 focus:border-primary-container text-on-surface transition-colors placeholder:text-on-surface-variant/50 outline-none"
+                    className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40"
                     type="password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}

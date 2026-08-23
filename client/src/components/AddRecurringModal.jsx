@@ -65,7 +65,7 @@ const AddRecurringModal = ({ isOpen, onClose, onAdded }) => {
               type="text"
               value={description}
               onChange={e => setDescription(e.target.value)}
-              className="w-full bg-surface-container-high border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary"
+              className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40"
               placeholder="e.g. Netflix Subscription"
             />
           </div>
@@ -77,7 +77,7 @@ const AddRecurringModal = ({ isOpen, onClose, onAdded }) => {
                 type="number"
                 value={amount}
                 onChange={e => setAmount(e.target.value)}
-                className="w-full bg-surface-container-high border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary"
+                className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40"
                 placeholder="0.00"
               />
             </div>
@@ -86,7 +86,7 @@ const AddRecurringModal = ({ isOpen, onClose, onAdded }) => {
               <select
                 value={frequency}
                 onChange={e => setFrequency(e.target.value)}
-                className="w-full bg-surface-container-high border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary"
+                className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40"
               >
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
@@ -101,7 +101,7 @@ const AddRecurringModal = ({ isOpen, onClose, onAdded }) => {
               <select
                 value={category}
                 onChange={e => setCategory(e.target.value)}
-                className="w-full bg-surface-container-high border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary"
+                className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40"
               >
                 <option value="">Select Category</option>
                 <option value="Housing">Housing</option>
@@ -117,7 +117,7 @@ const AddRecurringModal = ({ isOpen, onClose, onAdded }) => {
                 type="date"
                 value={nextPaymentDate}
                 onChange={e => setNextPaymentDate(e.target.value)}
-                className="w-full bg-surface-container-high border border-white/10 rounded-xl px-4 py-3 text-on-surface focus:outline-none focus:border-primary"
+                className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40"
               />
             </div>
           </div>

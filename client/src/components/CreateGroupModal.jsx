@@ -115,7 +115,7 @@ const CreateGroupModal = ({ isOpen, onClose, onGroupCreated }) => {
           <div>
             <label className="block text-label-sm text-on-surface-variant mb-2 uppercase tracking-wider">Group Name</label>
             <input 
-              className="w-full bg-surface border-b border-white/10 text-on-background px-4 py-3 focus:outline-none focus:border-primary transition-colors rounded-t-md" 
+              className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40" 
               placeholder="e.g. Summer Vacation" 
               type="text"
               value={name}
@@ -126,7 +126,7 @@ const CreateGroupModal = ({ isOpen, onClose, onGroupCreated }) => {
           <div>
             <label className="block text-label-sm text-on-surface-variant mb-2 uppercase tracking-wider">Description</label>
             <input 
-              className="w-full bg-surface border-b border-white/10 text-on-background px-4 py-3 focus:outline-none focus:border-primary transition-colors rounded-t-md" 
+              className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40" 
               placeholder="Trip to Goa" 
               type="text"
               value={description}
@@ -162,7 +162,7 @@ const CreateGroupModal = ({ isOpen, onClose, onGroupCreated }) => {
             )}
             
             <input 
-              className="w-full bg-surface border-b border-white/10 text-on-background px-4 py-3 focus:outline-none focus:border-primary transition-colors rounded-t-md" 
+              className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40" 
               placeholder="Search by name or email..." 
               type="text"
               value={searchQuery}

@@ -47,7 +47,7 @@ const CreateBudgetModal = ({ isOpen, onClose, onBudgetCreated }) => {
           <div>
             <label className="block text-label-sm text-on-surface-variant mb-2 uppercase tracking-wider">Category</label>
             <select 
-              className="w-full bg-surface border-b border-white/10 text-on-background px-4 py-3 focus:outline-none focus:border-primary transition-colors appearance-none"
+              className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md appearance-none"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               required
@@ -65,7 +65,7 @@ const CreateBudgetModal = ({ isOpen, onClose, onBudgetCreated }) => {
           <div>
             <label className="block text-label-sm text-on-surface-variant mb-2 uppercase tracking-wider">Monthly Limit (₹)</label>
             <input 
-              className="w-full bg-surface border-b border-white/10 text-on-background px-4 py-3 focus:outline-none focus:border-primary transition-colors" 
+              className="w-full bg-surface-container-lowest/60 border border-white/10 rounded-xl px-4 py-3 text-sm focus:border-primary-container focus:ring-0 text-on-background transition-all outline-none font-body-md placeholder:text-on-surface-variant/40" 
               placeholder="0.00" 
               type="number"
               min="0"
