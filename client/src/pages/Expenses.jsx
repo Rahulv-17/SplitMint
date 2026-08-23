@@ -106,12 +106,12 @@ const Expenses = () => {
           </div>
 
           {/* Filters */}
-          <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 items-center">
+          <div className="flex gap-2 w-full md:w-auto overflow-x-auto pb-2 md:pb-0 items-center [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {filterBtns.map(btn => (
               <button
                 key={btn}
                 onClick={() => setFilter(btn)}
-                className={`px-4 py-2 rounded-full font-label-sm text-label-sm whitespace-nowrap transition-colors ${
+                className={`shrink-0 px-4 py-2 rounded-full font-label-sm text-label-sm whitespace-nowrap transition-colors ${
                   filter === btn
                     ? 'border border-primary/30 bg-primary/10 text-primary'
                     : 'border border-white/10 text-on-surface-variant hover:text-on-background hover:border-white/30'
@@ -121,7 +121,7 @@ const Expenses = () => {
               </button>
             ))}
             <button
-              className="bg-primary-container text-black px-4 py-2 rounded font-label-sm text-label-sm font-bold flex items-center gap-2 hover:bg-primary transition-colors ml-4"
+              className="shrink-0 bg-primary-container text-black px-4 py-2 rounded font-label-sm text-label-sm font-bold flex items-center gap-2 hover:bg-primary transition-colors ml-4"
               onClick={() => setIsModalOpen(true)}
             >
               <span className="material-symbols-outlined text-[18px]">add</span>
