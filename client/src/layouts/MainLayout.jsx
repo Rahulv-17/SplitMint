@@ -72,7 +72,7 @@ const MainLayout = ({ children }) => {
       </nav>
 
       {/* Main Content Area */}
-      <main className="flex-1 md:ml-sidebar-width min-h-screen pb-24 md:pb-8">
+      <main className="flex-1 md:ml-sidebar-width min-h-screen pb-24 md:pb-8 min-w-0">
         {/* TopAppBar (Mobile & Desktop Header) */}
         <header className="flex justify-between items-center h-20 px-margin-mobile md:px-margin-desktop docked full-width top-0 sticky z-40 bg-surface/80 dark:bg-surface/80 backdrop-blur-xl border-b border-white/10">
           <div className="flex items-center gap-4">
