@@ -1,6 +1,10 @@
 # 🍃 SplitMint
 
 > Smart Expense Sharing & Financial Tracking Application
+> 
+>[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-splitmint.rahulvaddi.me-6366f1?style=for-the-badge)](https://splitmint.rahulvaddi.me)
+[![GitHub](https://img.shields.io/badge/GitHub-Rahulv--17%2FSplitMint-181717?style=for-the-badge&logo=github)](https://github.com/Rahulv-17/SplitMint)
+
 
 SplitMint is a full-stack, real-time web application designed to make sharing expenses, managing group budgets, and tracking personal finances effortless. Whether you're splitting bills with roommates, planning a trip, or just keeping track of your budget, SplitMint has you covered.
 
